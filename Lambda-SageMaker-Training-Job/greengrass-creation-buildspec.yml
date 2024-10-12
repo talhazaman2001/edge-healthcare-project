@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - echo "Installing dependencies for Greengrass Lambda..."
+      - pip install --target ./package boto3  
+  build:
+    commands:
+      - echo "Packaging the Greengrass creation Lambda function..."
+      - cp -r *.py ./package/
+      - cd package
+      - zip -r ../greengrass_creation_.zip .
+      - cd ..
+artifacts:
+  files:
+    - greengrass_creation.zip 
+
+cache:
+  paths:
+    - ./package/**
