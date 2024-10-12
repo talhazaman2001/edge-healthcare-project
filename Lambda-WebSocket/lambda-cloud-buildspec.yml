@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:  
+    runtime-versions:
+      python 3.12
+    commands:
+      - echo "Installing dependencies for Cloud Lambda..."
+      - pip install --target ./package boto3
+
+    build:
+      commands:
+        - echo "Packaging Lambda function for the Cloud..."
+        - cp -r *.py ./package/
+        - cd package 
+        - zip -r ../lambda_websocket.zip
+        - cd .. 
+        - echo "Cloud Lambda package created."
+
+artifacts:
+  files:
+    - lambda_websocket.zip.zip
+
+cache:
+  paths:
+    - ./package/**/*
+
+
+
