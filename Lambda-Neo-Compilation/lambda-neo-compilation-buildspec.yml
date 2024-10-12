@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - echo "Installing dependencies for Lambda SageMaker Neo Compilation..."
+      - pip install --target ./package boto3
+  build:
+    commands:
+      - echo "Packaging Lambda function for SageMaker Neo compilation job..."
+      - cp -r *.py ./package/
+      - cd package
+      - zip -r ../lambda_sagemaker_neo.zip .
+      - cd ..
+artifacts:
+  files:
+    - lambda_sagemaker_neo.zip
+
+cache:
+  paths:
+    - ./package/**
