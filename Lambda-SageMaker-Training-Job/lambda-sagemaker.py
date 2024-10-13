@@ -51,11 +51,28 @@ training_params = {
 }
 
 # Start the SageMaker training job
-def trigger_training_job():
+def lambda_handler(event, context):
     try:
+        # Start the SageMaker training job
         response = sagemaker.create_training_job(**training_params)
-        print(f"Training job {training_job_name} started successfully.")
-        print(json.dumps(response, indent = 4, default = str))
-    
+        print(f"Training job {training_params['TrainingJobName']} started successfully.")
+        
+        # Return success response
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'message': f"Training job {training_params['TrainingJobName']} started successfully.",
+                'response': response
+            }, default=str)
+        }
+
     except Exception as e:
         print(f"Error starting training job: {str(e)}")
+        
+        # Return error response
+        return {
+            'statusCode': 500,
+            'body': json.dumps({
+                'message': f"Error starting training job: {str(e)}"
+            })
+        }
