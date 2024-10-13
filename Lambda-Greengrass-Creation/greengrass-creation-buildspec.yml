@@ -16,7 +16,7 @@ phases:
       - cd package
       - zip -r ../greengrass_creation_combined.zip .
       - cd ..
-      - zip -g greengrass_creation_combined.zip greengrass-creation-appspec.yml
+      - zip -g greengrass_creation_combined.zip Lambda-Greengrass-Creation/greengrass-creation-appspec.yml
       - echo "Lambda Greengrass Creation with AppSpec file created."
 artifacts:
   files:
