@@ -1,0 +1,6 @@
+version: 0.0
+Resources:
+  - LambdaNeoCompilationFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: "sagemaker-neo-compilation-job"
