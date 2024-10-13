@@ -17,7 +17,7 @@ phases:
       - cd package 
       - zip -r ../lambda_websocket_combined.zip .  
       - cd .. 
-      - zip -g lambda_websocket_combined.zip lambda-cloud-appspec.yml
+      - zip -g lambda_websocket_combined.zip Lambda-WebSocket/lambda-cloud-appspec.yml
       - echo "Cloud Lambda package created."
 
 artifacts:
