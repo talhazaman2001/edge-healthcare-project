@@ -8,22 +8,20 @@ phases:
       - echo "Installing dependencies for Cloud Lambda..."
       - pip install --target ./package boto3
 
-    build:
-      commands:
-        - echo "Packaging Lambda function for the Cloud..."
-        - cp -r *.py ./package/
-        - cd package 
-        - zip -r ../lambda_websocket.zip
-        - cd .. 
-        - echo "Cloud Lambda package created."
+  build:
+    commands:
+      - echo "Packaging Lambda function for the Cloud..."
+      - mkdir -p package  
+      - cp -r *.py ./package/  
+      - cd package 
+      - zip -r ../lambda_websocket.zip .  
+      - cd .. 
+      - echo "Cloud Lambda package created."
 
 artifacts:
   files:
-    - lambda_websocket.zip.zip
+    - lambda_websocket.zip  
 
 cache:
   paths:
-    - ./package/**/*
-
-
-
+    - ./package/**
