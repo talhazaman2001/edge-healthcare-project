@@ -13,10 +13,11 @@ phases:
       - echo "Packaging Lambda function for the Cloud..."
       - mkdir -p package  
       - cp -r Lambda-WebSocket/*.py ./package/ 
-      - cp Lambda-WebSocket/lambda-cloud-appspec.yml ./package/
+      - cp Lambda-WebSocket/lambda-cloud-appspec.yml .
       - cd package 
       - zip -r ../lambda_websocket_combined.zip .  
       - cd .. 
+      - zip -g lambda_websocket_combined.zip lambda-cloud-appspec.yml
       - echo "Cloud Lambda package created."
 
 artifacts:
