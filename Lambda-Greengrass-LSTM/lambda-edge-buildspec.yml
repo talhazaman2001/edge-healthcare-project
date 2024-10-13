@@ -14,7 +14,7 @@ phases:
     commands:
       - echo "Packaging Lambda function for IoT Greengrass..."
       - mkdir -p package  
-      - cp -r *.py ./package/  
+      - cp -r Lambda-Greengrass-LSTM/*.py ./package/  
       - cd package 
       - zip -r ../greengrass_lstm.zip .  
       - cd .. 
