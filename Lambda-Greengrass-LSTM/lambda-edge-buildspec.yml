@@ -10,14 +10,15 @@ phases:
       - pip install --target ./package numpy
       - pip install --target ./package tensorflow
 
-    build:
-      commands:
-        - echo "Packaging Lambda function for IoT Greengrass..."
-        - cp -r *.py ./package/
-        - cd package 
-        - zip -r ../greengrass_lstm.zip
-        - cd .. 
-        - echo "Edge Lambda package created."
+  build:
+    commands:
+      - echo "Packaging Lambda function for IoT Greengrass..."
+      - mkdir -p package  
+      - cp -r *.py ./package/  
+      - cd package 
+      - zip -r ../greengrass_lstm.zip .  
+      - cd .. 
+      - echo "Edge Lambda package created."
 
 artifacts:
   files:
@@ -25,7 +26,4 @@ artifacts:
 
 cache:
   paths:
-    - ./package/**/*
-
-
-
+    - ./package/**
