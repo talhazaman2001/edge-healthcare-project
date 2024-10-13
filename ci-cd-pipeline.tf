@@ -129,16 +129,18 @@ resource "aws_iam_role_policy" "codebuild_s3_policy" {
       {
         Effect = "Allow",
         Action = [
-          "s3:GetObject"
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket"
         ],
         Resource = [
-          "arn:aws:s3:::codepipeline-artifacts-talha/lambda-pipeline/*"  
+          "arn:aws:s3:::codepipeline-artifacts-talha",          
+          "arn:aws:s3:::codepipeline-artifacts-talha/*"  
         ]
       }
     ]
   })
 }
-
 
 # IAM Role for CodeDeploy
 resource "aws_iam_role" "codedeploy_role" {
@@ -160,6 +162,59 @@ resource "aws_iam_role_policy_attachment" "codedeploy_attach" {
   role       = aws_iam_role.codedeploy_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployFullAccess"
 }
+
+# IAM Policy to allow CodePipeline to create CodeDeploy deployments
+resource "aws_iam_role_policy" "codepipeline_codedeploy_policy" {
+  name = "codepipeline-codedeploy-access-policy"
+  role = "codepipeline-role"  
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "codedeploy:CreateDeployment",
+          "codedeploy:GetDeployment",
+          "codedeploy:GetDeploymentGroup",
+          "codedeploy:GetDeploymentConfig",
+          "codedeploy:RegisterApplicationRevision",
+          "codedeploy:GetApplicationRevision"
+        ],
+        Resource = [
+          "arn:aws:codedeploy:eu-west-2:463470963000:deploymentgroup:lambda-apps/*",
+          "arn:aws:codedeploy:eu-west-2:463470963000:deploymentconfig:*",
+          "arn:aws:codedeploy:eu-west-2:463470963000:application:lambda-apps*"
+        ]
+      }
+    ]
+  })
+}
+
+# IAM Policy to allow CodeDeploy to access S3 pipeline artifacts
+resource "aws_iam_role_policy" "codedeploy_s3_policy" {
+  name = "codedeploy-s3-access-policy"
+  role = "codedeploy-role"  
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket"
+        ],
+        Resource = [
+          "arn:aws:s3:::codepipeline-artifacts-talha",          
+          "arn:aws:s3:::codepipeline-artifacts-talha/*"  
+        ]
+      }
+    ]
+  })
+}
+
 
 # Create CodeBuild Project for Lambda at the Edge (Greengrass)
 resource "aws_codebuild_project" "lambda_edge_build" {
@@ -265,7 +320,7 @@ resource "aws_codebuild_project" "lambda_greengrass_creation_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
-        buildspec = "Lambda-Greengrass-Creation/lambda-greengrass-buildspec.yml"
+        buildspec = "Lambda-Greengrass-Creation/greengrass-creation-buildspec.yml"
     }
 
     artifacts {
