@@ -12,14 +12,14 @@ phases:
       - echo "Packaging the Greengrass creation Lambda function..."
       - mkdir -p package  
       - cp -r Lambda-Greengrass-Creation/*.py ./package/  
-      - cp Lambda-Greengrass-Creation/greengrass-creation-appspec.yml ./
+      - cp Lambda-Greengrass-Creation/greengrass-creation-appspec.yml ./package/
       - cd package
-      - zip -r ../greengrass_creation.zip .  
+      - zip -r ../greengrass_creation_combined.zip .
       - cd ..
+      - echo z
 artifacts:
   files:
-    - greengrass_creation.zip  
-    - greengrass-creation-appspec.yml
+    - greengrass_creation_combined.zip  
 
 cache:
   paths:
