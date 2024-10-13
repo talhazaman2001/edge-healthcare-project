@@ -19,10 +19,53 @@ resource "aws_iam_role_policy_attachment" "codepipeline_attach" {
     policy_arn = "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "codestar_attach" {
-    role = aws_iam_role.codepipeline_role.name
-    policy_arn = "arn:aws:iam::aws:policy/AWSCodeStarFullAccess"
+# IAM Policy for CodePipeline to use CodeStarConnection
+resource "aws_iam_policy" "codestar_connections_policy" {
+  name        = "codestar-connections-policy"
+  description = "Policy to allow CodePipeline to use CodeStar Connections"
+  policy      = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = "codestar-connections:UseConnection"
+      Resource = "arn:aws:codestar-connections:*:*:connection/*"
+    }]
+  })
 }
+
+resource "aws_iam_role_policy_attachment" "codestar_policy_attach" {
+  role       = aws_iam_role.codepipeline_role.name
+  policy_arn = aws_iam_policy.codestar_connections_policy.arn
+}
+
+# IAM Policy for CodePipeline to upload artifacts to S3
+resource "aws_iam_role_policy" "codepipeline_s3_access" {
+  name = "codepipeline-s3-access-policy"
+  role = "codepipeline-role"  
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      Resource = [
+        "arn:aws:s3:::codepipeline-artifacts-talha",        
+        "arn:aws:s3:::codepipeline-artifacts-talha/*" 
+      ]
+    }]
+  })
+}
+
+# IAM Policy for CodePipeline to trigger CodeBuild
+resource "aws_iam_role_policy_attachment" "codebuild_access" {
+  role       = aws_iam_role.codepipeline_role.name 
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
+}
+
 
 # IAM Role for CodeBuild
 resource "aws_iam_role" "codebuild_role" {
@@ -44,6 +87,58 @@ resource "aws_iam_role_policy_attachment" "codebuild_attach" {
   role       = aws_iam_role.codebuild_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
 }
+
+# IAM Policy for CodeBuild to create CloudWatch Logs
+resource "aws_iam_role_policy" "codebuild_cloudwatch_policy" {
+  name = "codebuild-cloudwatch-logs-policy"
+  role = aws_iam_role.codebuild_role.name
+  
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Action = [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      Resource = [
+        "arn:aws:logs:eu-west-2:463470963000:log-group:/aws/codebuild/lambda-edge-build:*",
+        "arn:aws:logs:eu-west-2:463470963000:log-group:/aws/codebuild/lambda-cloud-build:*",
+        "arn:aws:logs:eu-west-2:463470963000:log-group:/aws/codebuild/lambda-sagemaker-training-job-build:*",
+        "arn:aws:logs:eu-west-2:463470963000:log-group:/aws/codebuild/lambda-neo-compilation-build:*",
+        "arn:aws:logs:eu-west-2:463470963000:log-group:/aws/codebuild/lambda-greengrass-creation-build:*"
+      ]
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_cloudwatch_logs" {
+  role       = aws_iam_role.codebuild_role.name 
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
+}
+
+# IAM Policy to allow CodeBuild to access S3 pipeline artifacts
+resource "aws_iam_role_policy" "codebuild_s3_policy" {
+  name = "codebuild-s3-access-policy"
+  role = "codebuild-role"  
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject"
+        ],
+        Resource = [
+          "arn:aws:s3:::codepipeline-artifacts-talha/lambda-pipeline/*"  
+        ]
+      }
+    ]
+  })
+}
+
 
 # IAM Role for CodeDeploy
 resource "aws_iam_role" "codedeploy_role" {
@@ -74,7 +169,7 @@ resource "aws_codebuild_project" "lambda_edge_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
-        buildspec = "lambda-edge-buildspec.yml"
+        buildspec = "Lambda-Greengrass-LSTM/lambda-edge-buildspec.yml"
     }
 
     artifacts {
@@ -98,7 +193,7 @@ resource "aws_codebuild_project" "lambda_cloud_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
-        buildspec = "lambda-cloud-buildspec.yml"
+        buildspec = "Lambda-WebSocket/lambda-cloud-buildspec.yml"
     }
 
     artifacts {
@@ -122,7 +217,7 @@ resource "aws_codebuild_project" "lambda_sagemaker_training_job_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
-        buildspec = "lambda-sagemaker-training-buildspec.yml"
+        buildspec = "Lambda-SageMaker-Training-Job/lambda-sagemaker-training-buildspec.yml"
     }
 
     artifacts {
@@ -146,7 +241,7 @@ resource "aws_codebuild_project" "lambda_neo_compilation_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
-        buildspec = "lambda-neo-compilation-buildspec.yml"
+        buildspec = "Lambda-Neo-Compilation/lambda-neo-compilation-buildspec.yml"
     }
 
     artifacts {
@@ -170,7 +265,7 @@ resource "aws_codebuild_project" "lambda_greengrass_creation_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
-        buildspec = "lambda-greengrass-buildspec.yml"
+        buildspec = "Lambda-Greengrass-Creation/lambda-greengrass-buildspec.yml"
     }
 
     artifacts {
@@ -310,8 +405,8 @@ resource "aws_codepipeline" "lambda_pipeline" {
             version = "1"
             output_artifacts = ["SourceOutput"]
             configuration = {
-                ConnectionArn = "arn:aws:codestar-connections:eu-west-2:463470963000:connection/43c0e9a0-f3d6-4d89-9645-5044376ab9f4"
-                FullRepositoryId = "talhazaman2001/edge-computing-healthcare-project"
+                ConnectionArn = "arn:aws:codestar-connections:eu-west-2:463470963000:connection/5bcc636d-e780-4617-a94e-957c222cf902"
+                FullRepositoryId = "talhazaman2001/edge-healthcare-project"
                 BranchName = "main"
             }
         }
