@@ -19,6 +19,11 @@ resource "aws_iam_role_policy_attachment" "codepipeline_attach" {
     policy_arn = "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "codestar_attach" {
+    role = aws_iam_role.codepipeline_role.name
+    policy_arn = "arn:aws:iam::aws:policy/AWSCodeStarFullAccess"
+}
+
 # IAM Role for CodeBuild
 resource "aws_iam_role" "codebuild_role" {
   name = "codebuild-role"
@@ -322,7 +327,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
             provider = "CodeBuild"
             version = "1"
             input_artifacts = ["SourceOutput"]
-            output_artifacts = ["BuildOutput"]
+            output_artifacts = ["BuildOutputEdge"]
             configuration = {
                 ProjectName = "${aws_codebuild_project.lambda_edge_build.name}"
             }
@@ -335,7 +340,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
             provider = "CodeBuild"
             version = "1"
             input_artifacts = ["SourceOutput"]
-            output_artifacts = ["BuildOutput"]
+            output_artifacts = ["BuildOutputCloud"]
             configuration = {
                 ProjectName = "${aws_codebuild_project.lambda_cloud_build.name}"
             }
@@ -348,7 +353,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
           provider = "CodeBuild"
           version = "1"
           input_artifacts = ["SourceOutput"]
-          output_artifacts = ["BuildOutput"]
+          output_artifacts = ["BuildOutputSageMaker"]
           configuration = {
             ProjectName = "${aws_codebuild_project.lambda_sagemaker_training_job_build.name}"
           }
@@ -361,9 +366,9 @@ resource "aws_codepipeline" "lambda_pipeline" {
           provider = "CodeBuild"
           version = "1"
           input_artifacts = ["SourceOutput"]
-          output_artifacts = ["BuildOutput"]
+          output_artifacts = ["BuildOutputNeo"]
           configuration = {
-            ProjectName = "${aws_codebuild_project.lambda_neo_compilation_job_build.name}"
+            ProjectName = "${aws_codebuild_project.lambda_neo_compilation_build.name}"
           }
         }
 
@@ -374,7 +379,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
           provider = "CodeBuild"
           version = "1"
           input_artifacts = ["SourceOutput"]
-          output_artifacts = ["BuildOutput"]
+          output_artifacts = ["BuildOutputGreengrass"]
           configuration = {
             ProjectName = "${aws_codebuild_project.lambda_greengrass_creation_build.name}"
           }
@@ -390,7 +395,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
             owner = "AWS"
             provider = "CodeDeploy"
             version = "1"
-            input_artifacts = ["BuildOutput"]
+            input_artifacts = ["BuildOutputEdge"]
             configuration = {
                 ApplicationName = aws_codedeploy_app.lambda_codedeploy_apps.name
                 DeploymentGroupName = "${aws_codedeploy_deployment_group.lambda_edge_deployment_group.deployment_group_name}"
@@ -403,7 +408,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
             owner = "AWS"
             provider = "CodeDeploy"
             version = "1"
-            input_artifacts = ["BuildOutput"]
+            input_artifacts = ["BuildOutputCloud"]
             configuration = {
                 ApplicationName = aws_codedeploy_app.lambda_codedeploy_apps.name
                 DeploymentGroupName = "${aws_codedeploy_deployment_group.lambda_cloud_deployment_group.deployment_group_name}"
@@ -416,7 +421,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
           owner = "AWS"
           provider = "CodeDeploy"
           version = "1"
-          input_artifacts = ["BuildOutput"]
+          input_artifacts = ["BuildOutputSageMaker"]
           configuration = {
             ApplicationName = aws_codedeploy_app.lambda_codedeploy_apps.name
             DeploymentGroupName = "${aws_codedeploy_deployment_group.lambda_sagemaker_training_job_deployment_group.deployment_group_name}"
@@ -429,7 +434,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
           owner = "AWS"
           provider = "CodeDeploy"
           version = "1"
-          input_artifacts = ["BuildOutput"]
+          input_artifacts = ["BuildOutputNeo"]
           configuration = {
             ApplicationName = aws_codedeploy_app.lambda_codedeploy_apps.name
             DeploymentGroupName = "${aws_codedeploy_deployment_group.lambda_neo_compilation_deployment_group.deployment_group_name}"
@@ -442,7 +447,7 @@ resource "aws_codepipeline" "lambda_pipeline" {
           owner = "AWS"
           provider = "CodeDeploy"
           version = "1"
-          input_artifacts = ["BuildOutput"]
+          input_artifacts = ["BuildOutputGreengrass"]
           configuration = {
             ApplicationName = aws_codedeploy_app.lambda_codedeploy_apps.name
             DeploymentGroupName = "${aws_codedeploy_deployment_group.lambda_greengrass_creation_deployment_group.deployment_group_name}"
