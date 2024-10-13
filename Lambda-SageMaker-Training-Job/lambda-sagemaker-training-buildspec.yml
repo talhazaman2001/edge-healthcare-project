@@ -12,7 +12,7 @@ phases:
       - echo "Packaging Lambda function for SageMaker training job..."
       - mkdir -p package  
       - cp -r Lambda-SageMaker-Training-Job/*.py ./package/  
-      - cp Lambda-Greengrass-Creation/lambda-sagemaker-training-appspec.yml ./
+      - cp Lambda-SageMaker-Training-Job/lambda-sagemaker-training-appspec.yml ./
       - cd package
       - zip -r ../lambda_sagemaker.zip .  
       - cd ..
