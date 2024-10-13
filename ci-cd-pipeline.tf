@@ -202,9 +202,7 @@ resource "aws_iam_role_policy" "codedeploy_s3_policy" {
       {
         Effect = "Allow"
         Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:ListBucket"
+          "s3:*"
         ],
         Resource = [
           "arn:aws:s3:::codepipeline-artifacts-talha",          
@@ -223,7 +221,7 @@ resource "aws_codebuild_project" "lambda_edge_build" {
 
     source {
         type = "GITHUB"
-        location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
+        location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
         buildspec = "Lambda-Greengrass-LSTM/lambda-edge-buildspec.yml"
     }
 
@@ -247,7 +245,7 @@ resource "aws_codebuild_project" "lambda_cloud_build" {
 
     source {
         type = "GITHUB"
-        location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
+        location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
         buildspec = "Lambda-WebSocket/lambda-cloud-buildspec.yml"
     }
 
@@ -271,7 +269,7 @@ resource "aws_codebuild_project" "lambda_sagemaker_training_job_build" {
 
     source {
         type = "GITHUB"
-        location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
+        location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
         buildspec = "Lambda-SageMaker-Training-Job/lambda-sagemaker-training-buildspec.yml"
     }
 
@@ -295,7 +293,7 @@ resource "aws_codebuild_project" "lambda_neo_compilation_build" {
 
     source {
         type = "GITHUB"
-        location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
+        location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
         buildspec = "Lambda-Neo-Compilation/lambda-neo-compilation-buildspec.yml"
     }
 
@@ -319,7 +317,7 @@ resource "aws_codebuild_project" "lambda_greengrass_creation_build" {
 
     source {
         type = "GITHUB"
-        location = "https://github.com/talhazaman2001/edge-computing-healthcare-project.git"
+        location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
         buildspec = "Lambda-Greengrass-Creation/greengrass-creation-buildspec.yml"
     }
 
