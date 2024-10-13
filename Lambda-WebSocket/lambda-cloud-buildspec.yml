@@ -12,7 +12,8 @@ phases:
     commands:
       - echo "Packaging Lambda function for the Cloud..."
       - mkdir -p package  
-      - cp -r Lambda-WebSocket/*.py ./package/  
+      - cp -r Lambda-WebSocket/*.py ./package/ 
+       - cp Lambda-Greengrass-Creation/lambda-cloud-appspec.yml ./
       - cd package 
       - zip -r ../lambda_websocket.zip .  
       - cd .. 
@@ -21,6 +22,7 @@ phases:
 artifacts:
   files:
     - lambda_websocket.zip  
+    - lambda-cloud-appspec.yml
 
 cache:
   paths:
