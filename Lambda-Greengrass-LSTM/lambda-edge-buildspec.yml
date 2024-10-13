@@ -19,7 +19,7 @@ phases:
       - cd package 
       - zip -r ../greengrass_lstm_combined.zip .  
       - cd .. 
-      - zip -g greengrass_lstm_combined.zip LambdaGreengrass-LSTM/lambda-edge-appspec.yml
+      - zip -g greengrass_lstm_combined.zip Lambda-Greengrass-LSTM/lambda-edge-appspec.yml
       - echo "Edge Lambda package created."
 
 artifacts:
