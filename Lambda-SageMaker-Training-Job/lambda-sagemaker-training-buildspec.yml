@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Packaging Lambda function for SageMaker training job..."
       - mkdir -p package  
-      - cp -r *.py ./package/  
+      - cp -r Lambda-SageMaker-Training-Job/*.py ./package/  
       - cd package
       - zip -r ../lambda_sagemaker.zip .  
       - cd ..
