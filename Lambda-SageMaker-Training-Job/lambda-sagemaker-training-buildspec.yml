@@ -12,14 +12,14 @@ phases:
       - echo "Packaging Lambda function for SageMaker training job..."
       - mkdir -p package  
       - cp -r Lambda-SageMaker-Training-Job/*.py ./package/  
-      - cp Lambda-SageMaker-Training-Job/lambda-sagemaker-training-appspec.yml ./
+      - cp Lambda-SageMaker-Training-Job/lambda-sagemaker-training-appspec.yml ./package/
       - cd package
-      - zip -r ../lambda_sagemaker.zip .  
+      - zip -r ../lambda_sagemaker_combined.zip .  
       - cd ..
 artifacts:
   files:
-    - lambda_sagemaker.zip  
-    - lambda-sagemaker-training-appspec.yml
+    - lambda_sagemaker_combined.zip  
+
 cache:
   paths:
     - ./package/**
