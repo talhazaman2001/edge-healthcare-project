@@ -10,13 +10,14 @@ phases:
   build:
     commands:
       - echo "Packaging Lambda function for SageMaker training job..."
-      - cp -r *.py ./package/
+      - mkdir -p package  
+      - cp -r *.py ./package/  
       - cd package
-      - zip -r ../lambda_sagemaker.zip .
+      - zip -r ../lambda_sagemaker.zip .  
       - cd ..
 artifacts:
   files:
-    - lambda_sagemaker.zip
+    - lambda_sagemaker.zip  
 
 cache:
   paths:
