@@ -12,14 +12,13 @@ phases:
       - echo "Packaging Lambda function for SageMaker Neo compilation job..."
       - mkdir -p package  
       - cp -r Lambda-Neo-Compilation/*.py ./package/  
-      - cp Lambda-Neo-Compilation/lambda-neo-compilation-appspec.yml ./
+      - cp Lambda-Neo-Compilation/lambda-neo-compilation-appspec.yml ./package/
       - cd package
-      - zip -r ../lambda_sagemaker_neo.zip .  
+      - zip -r ../lambda_sagemaker_neo_combined.zip .  
       - cd ..
 artifacts:
   files:
-    - lambda_sagemaker_neo.zip
-    - lambda-neo-compilation-appspec.yml
+    - lambda_sagemaker_neo_combined.zip
 
 cache:
   paths:
