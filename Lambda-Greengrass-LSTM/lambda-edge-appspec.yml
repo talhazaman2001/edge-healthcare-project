@@ -1,0 +1,6 @@
+version: 0.0
+Resources:
+  - LambdaEdgeFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: "GreengrassLSTMFunction"
