@@ -16,7 +16,7 @@ phases:
       - cd package
       - zip -r ../lambda_sagemaker_combined.zip .  
       - cd ..
-      - zip -g lambda_sagemaker_combined.zip lambda-sagemaker-training-appspec.yml
+      - zip -g lambda_sagemaker_combined.zip LambdaSageMakerTrainingJob/lambda-sagemaker-training-appspec.yml
       - echo "Lambda Sagemaker Training with AppSpec file created"
 artifacts:
   files:
