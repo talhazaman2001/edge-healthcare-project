@@ -1,6 +1,6 @@
 version: 0.0
 Resources:
-  - LambdaFunction:
+  - myLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         Name: "greengrassLSTMFunction"
