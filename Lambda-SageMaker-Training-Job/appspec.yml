@@ -1,0 +1,9 @@
+version: 0.0
+Resources:
+  - LambdaSageMakerTrainingFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: "sagemaker-training-job"
+        Alias: "live"
+        CurrentVersion: 1
+        TargetVersion: 2
