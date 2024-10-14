@@ -1,9 +1,0 @@
-version: 0.0
-Resources:
-  - LambdaEdgeFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        Name: "GreengrassLSTMFunction"
-        Alias: "live"
-        CurrentVersion: 1
-        TargetVersion: 2
