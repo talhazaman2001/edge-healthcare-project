@@ -121,7 +121,7 @@ resource "aws_iam_role_policy_attachment" "codebuild_cloudwatch_logs" {
 # IAM Policy to allow CodeBuild to access S3 pipeline artifacts
 resource "aws_iam_role_policy" "codebuild_s3_policy" {
   name = "codebuild-s3-access-policy"
-  role = "codebuild-role"  
+  role = aws_iam_role.codebuild_role.name  
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -222,7 +222,7 @@ resource "aws_codebuild_project" "lambda_edge_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "Lambda-Greengrass-LSTM/lambda-edge-buildspec.yml"
+        buildspec = "buildspec.yml"
     }
 
     artifacts {
@@ -246,7 +246,7 @@ resource "aws_codebuild_project" "lambda_cloud_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "Lambda-WebSocket/lambda-cloud-buildspec.yml"
+        buildspec = "buildspec.yml"
     }
 
     artifacts {
@@ -270,7 +270,7 @@ resource "aws_codebuild_project" "lambda_sagemaker_training_job_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "Lambda-SageMaker-Training-Job/lambda-sagemaker-training-buildspec.yml"
+        buildspec = "buildspec.yml"
     }
 
     artifacts {
@@ -294,7 +294,7 @@ resource "aws_codebuild_project" "lambda_neo_compilation_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "Lambda-Neo-Compilation/lambda-neo-compilation-buildspec.yml"
+        buildspec = "buildspec.yml"
     }
 
     artifacts {
@@ -318,7 +318,7 @@ resource "aws_codebuild_project" "lambda_greengrass_creation_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "Lambda-Greengrass-Creation/greengrass-creation-buildspec.yml"
+        buildspec = "buildspec.yml"
     }
 
     artifacts {
