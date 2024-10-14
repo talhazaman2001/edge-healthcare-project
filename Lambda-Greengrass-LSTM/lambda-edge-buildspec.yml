@@ -14,8 +14,10 @@ phases:
     commands:
       - echo "Packaging Lambda function for IoT Greengrass..."
       - mkdir -p package  
-      - cp -r Lambda-Greengrass-LSTM/*.py ./package/  
-      - zip -r greengrass_lstm_combined.zip package
+      - cp -r Lambda-Greengrass-LSTM/*.py ./package/ 
+      - cd package 
+      - zip -r greengrass_lstm_combined.zip ./* 
+      - cd ..
       - zip -g greengrass_lstm_combined.zip appspec.yml  
       - echo "Edge Lambda package created."
 
