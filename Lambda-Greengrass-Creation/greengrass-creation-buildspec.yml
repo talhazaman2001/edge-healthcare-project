@@ -5,24 +5,15 @@ phases:
     runtime-versions:
       python: 3.12
     commands:
-      - echo "Installing dependencies for Greengrass Lambda..."
-      - pip install --target ./package boto3  
+      - echo "No dependencies to install"
 
   build:
     commands:
-      - echo "Packaging the Greengrass creation Lambda function..."
-      - mkdir -p package  
-      - cp -r Lambda-Greengrass-Creation/*.py ./package/
-      - cd package 
-      - zip -r greengrass_creation_combined.zip ./*
-      - cd ..
-      - zip -g greengrass_creation_combined.zip appspec.yml
-      - echo "Lambda Greengrass Creation with AppSpec file created."
+      - echo "Adding appspec.yml to the existing Lambda zip..."
+      # Add appspec.yml to the existing greengrass_creation.zip
+      - zip -g greengrass_creation.zip appspec.yml
+      - echo "AppSpec file successfully added to Lambda zip."
 
 artifacts:
   files:
-    - greengrass_creation_combined.zip  
-
-cache:
-  paths:
-    - ./package/**
+    - greengrass_creation.zip
