@@ -12,7 +12,10 @@ phases:
       - echo "Packaging Lambda function for SageMaker training job..."
       - mkdir -p package  
       - cp -r Lambda-SageMaker-Training-Job/*.py ./package/  
+      - cd package
       - zip -r ../lambda_sagemaker_combined.zip .  
+      - cd ..
+      - zip -g greengrass_creation_combined.zip appspec.yml
       - echo "Lambda Sagemaker Training with AppSpec file created"
 artifacts:
   files:
