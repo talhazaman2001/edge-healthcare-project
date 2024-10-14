@@ -16,13 +16,8 @@ phases:
       - cd package
       - zip -r ../greengrass_creation_combined.zip .
       - cd ..
-      - zip -g greengrass_creation_combined.zip Lambda-Greengrass-Creation/greengrass-creation-appspec.yml
+      - zip -g greengrass_creation_combined.zip greengrass-creation-appspec.yml
       - echo "Lambda Greengrass Creation with AppSpec file created."
-  post-build:
-    commands:
-      - echo "Uploading the combined deployment package to S3..."
-      - aws s3 cp greengrass_creation_combined.zip s3://code-pipeline-artifacts-talha/greengrass_creation_combined.zip
-      - echo "Upload Complete."
 
 artifacts:
   files:
