@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Adding appspec.yml to the existing Lambda zip..."
       # Add appspec.yml to the existing greengrass_lstm.zip
-      - zip -g greengrass_lstm.zip appspec.yml
+      - - if [ -f Lambda-Greengrass-LSTM/greengrass_lstm.zip ]; then zip -g Lambda-Greengrass-LSTM/greengrass_lstm.zip Lambda-Greengrass-LSTM/appspec.yml; else echo "Zip file not found!"; exit 1; fi
       - echo "AppSpec file successfully added to Lambda zip."
 
 artifacts:
