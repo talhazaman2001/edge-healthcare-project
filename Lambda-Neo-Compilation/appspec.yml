@@ -1,0 +1,6 @@
+Resources:
+  - LambdaFunction:
+        Type: AWS::Lambda::Function
+        Properties:
+          Name: "sagemaker-neo-compilation-job"
+          Alias: "live"
