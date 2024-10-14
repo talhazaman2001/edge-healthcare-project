@@ -1,6 +1,6 @@
 version: 0.0
 Resources: 
-  - myLambdaFunction:
+  - sagemaker-training-job:
       Type: AWS::Lambda::Function
       Properties:
         Name: "sagemaker-training-job"
