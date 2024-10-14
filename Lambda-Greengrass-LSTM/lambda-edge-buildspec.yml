@@ -5,25 +5,15 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
-      - echo "Installing dependencies for Greengrass Lambda..."
-      - pip install --target ./package greengrasssdk
-      - pip install --target ./package numpy
-      - pip install --target ./package tensorflow
+      - echo "No dependencies to install"
 
   build:
     commands:
-      - echo "Packaging Lambda function for IoT Greengrass..."
-      - mkdir -p package  
-      - cp -r Lambda-Greengrass-LSTM/*.py ./package/ 
-      - cd package 
-      - zip -r greengrass_lstm_combined.zip ./* 
-      - cd ..
-      - zip -g greengrass_lstm_combined.zip appspec.yml  
-      - echo "Edge Lambda package created."
+      - echo "Adding appspec.yml to the existing Lambda zip..."
+      # Add appspec.yml to the existing greengrass_lstm.zip
+      - zip -g greengrass_lstm.zip appspec.yml
+      - echo "AppSpec file successfully added to Lambda zip."
 
 artifacts:
   files:
-    - greengrass_lstm_combined.zip
-cache:
-  paths:
-    - ./package/**
+    - greengrass_lstm.zip
