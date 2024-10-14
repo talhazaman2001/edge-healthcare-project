@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Adding appspec.yml to the existing Lambda zip..."
       # Add appspec.yml to the existing lambda_sagemaker.zip
-      - zip -g lambda_sagemaker.zip appspec.yml
+      - - if [ -f Lambda-SageMaker-Training-Job/lambda_sagemaker.zip ]; then zip -g Lambda-SageMaker-Training-Job/lambda_sagemaker.zip Lambda-SageMaker-Training-Job/appspec.yml; else echo "Zip file not found!"; exit 1; fi
       - echo "AppSpec file successfully added to Lambda zip."
 
 artifacts:
