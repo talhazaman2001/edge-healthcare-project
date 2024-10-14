@@ -1,9 +1,0 @@
-version: 0.0
-Resources:
-  - LambdaNeoCompilationFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        Name: "sagemaker-neo-compilation-job"
-        Alias: "live"
-        CurrentVersion: 1
-        TargetVersion: 2
