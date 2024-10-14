@@ -1,6 +1,6 @@
 version: 0.0
 Resources: 
-  - myLambdaFunction:
+  - edge-healthcare-lambda:
       Type: AWS::Lambda::Function
       Properties:
         Name: "edge-healthcare-lambda"
