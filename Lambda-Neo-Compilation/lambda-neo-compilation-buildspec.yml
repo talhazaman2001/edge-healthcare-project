@@ -5,22 +5,15 @@ phases:
     runtime-versions:
       python: 3.12
     commands:
-      - echo "Installing dependencies for Lambda SageMaker Neo Compilation..."
-      - pip install --target ./package boto3  
+      - echo "No dependencies to install"
+
   build:
     commands:
-      - echo "Packaging Lambda function for SageMaker Neo compilation job..."
-      - mkdir -p package  
-      - cp -r Lambda-Neo-Compilation/*.py ./package/  
-      - cd package
-      - zip -r lambda_sagemaker_neo_combined.zip ./*
-      - cd ..
-      - zip -g lambda_sagemaker_neo_combined.zip appspec.yml
-      - echo "Lambda Neo Compilation pacakge with AppSpec file created."
+      - echo "Adding appspec.yml to the existing Lambda zip..."
+      # Add appspec.yml to the existing lambda_sagemaker_neo.zip
+      - zip -g lambda_sagemaker_neo.zip appspec.yml
+      - echo "AppSpec file successfully added to Lambda zip."
+
 artifacts:
   files:
-    - lambda_sagemaker_neo_combined.zip
-
-cache:
-  paths:
-    - ./package/**
+    - lambda_sagemaker_neo.zip
