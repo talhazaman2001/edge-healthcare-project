@@ -1,18 +1,18 @@
 version: 0.0
 Resources:
   - LambdaFunction:
-      Name: "lambda-greengrass-creation"
-      Alias: "live"
+      name: "lambda-greengrass-creation"
+      alias: "live"
   - LambdaFunction:
-      Name: "greengrassLSTMFunction"
-      Alias: "live"
+      name: "greengrassLSTMFunction"
+      alias: "live"
   - LambdaFunction:
-      Name: "sagemaker-neo-compilation-job"
-      Alias: "live"
+      name: "sagemaker-neo-compilation-job"
+      alias: "live"
   - LambdaFunction:
-      Name: "sagemaker-training-job"
-      Alias: "live"
+      name: "sagemaker-training-job"
+      alias: "live"
   - LambdaFunction:
-      Name: "edge-healthcare-lambda"
-      Alias: "live"
+      name: "edge-healthcare-lambda"
+      alias: "live"
     
