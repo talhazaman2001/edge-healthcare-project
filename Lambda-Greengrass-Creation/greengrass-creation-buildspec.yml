@@ -13,7 +13,9 @@ phases:
       - echo "Packaging the Greengrass creation Lambda function..."
       - mkdir -p package  
       - cp -r Lambda-Greengrass-Creation/*.py ./package/
-      - zip -r greengrass_creation_combined.zip package
+      - cd package 
+      - zip -r greengrass_creation_combined.zip ./*
+      - cd ..
       - zip -g greengrass_creation_combined.zip appspec.yml
       - echo "Lambda Greengrass Creation with AppSpec file created."
 
