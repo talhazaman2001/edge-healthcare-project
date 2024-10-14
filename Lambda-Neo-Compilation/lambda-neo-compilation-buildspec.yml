@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Adding appspec.yml to the existing Lambda zip..."
       # Add appspec.yml to the existing lambda_sagemaker_neo.zip
-      - zip -g lambda_sagemaker_neo.zip appspec.yml
+      - - if [ -f Lambda-Neo-Compilation/lambda_sagemaker_neo.zip ]; then zip -g Lambda-Neo-Compilation/lambda_sagemaker_neo.zip Lambda-Neo-Compilation/appspec.yml; else echo "Zip file not found!"; exit 1; fi
       - echo "AppSpec file successfully added to Lambda zip."
 
 artifacts:
