@@ -1,9 +1,0 @@
-version: 0.0
-Resources:
-  - LambdaGreengrassCreationFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        Name: "lambda-greengrass-creation"
-        Alias: "live"
-        CurrentVersion: 1
-        TargetVersion: 2
