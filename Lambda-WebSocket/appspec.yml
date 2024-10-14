@@ -1,0 +1,6 @@
+- LambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: "edge-healthcare-lambda"
+        Alias: "live"
+    
