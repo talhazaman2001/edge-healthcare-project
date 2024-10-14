@@ -7,14 +7,13 @@ phases:
     commands:
       - echo "Installing dependencies for Greengrass Lambda..."
       - pip install --target ./package boto3  
+
   build:
     commands:
       - echo "Packaging the Greengrass creation Lambda function..."
       - mkdir -p package  
-      - cp -r Lambda-Greengrass-Creation/*.py ./package/  
-      - cd package
-      - zip -r ../greengrass_creation_combined.zip .
-      - cd ..
+      - cp -r Lambda-Greengrass-Creation/*.py ./package/
+      - zip -r greengrass_creation_combined.zip package
       - zip -g greengrass_creation_combined.zip appspec.yml
       - echo "Lambda Greengrass Creation with AppSpec file created."
 
