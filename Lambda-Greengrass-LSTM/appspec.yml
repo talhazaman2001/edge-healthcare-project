@@ -1,7 +1,8 @@
 version: 0.0
 Resources:
-  - greengrassLSTMFunction:
+  - lambda-greengrass-creation:
       Type: AWS::Lambda::Function
       Properties:
-        Name: "greengrassLSTMFunction"
+        Name: "lambda-greengrass-creation"
         Alias: "live"
+  
