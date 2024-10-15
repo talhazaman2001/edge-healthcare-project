@@ -41,7 +41,7 @@ resource "aws_iam_role_policy_attachment" "codestar_policy_attach" {
 # IAM Policy for CodePipeline to upload artifacts to S3
 resource "aws_iam_role_policy" "codepipeline_s3_access" {
   name = "codepipeline-s3-access-policy"
-  role = "codepipeline-role"  
+  role = aws_iam_role.codepipeline_role.name  
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -142,6 +142,36 @@ resource "aws_iam_role_policy" "codebuild_s3_policy" {
   })
 }
 
+# IAM Policy for CodeBuild to manage Lambda versions and aliases
+resource "aws_iam_policy" "codebuild_lambda_permissions" {
+  name        = "CodeBuildLambdaPermissions"
+  description = "IAM policy to allow CodeBuild to publish Lambda versions, update aliases, and get alias information"
+  policy      = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = [
+          "lambda:PublishVersion",
+          "lambda:UpdateAlias",
+          "lambda:GetAlias",
+          "lambda:ListAliases",
+          "lambda:GetFunction",
+          "lambda:ListVersionsByFunction"
+        ]
+        Resource = "arn:aws:lambda:eu-west-2:463470963000:function:*"
+      }
+    ]
+  })
+}
+
+
+resource "aws_iam_role_policy_attachment" "codebuild_attach_lambda_policy" {
+  role       = aws_iam_role.codebuild_role.name
+  policy_arn = aws_iam_policy.codebuild_lambda_permissions.arn
+}
+
+
 # IAM Role for CodeDeploy
 resource "aws_iam_role" "codedeploy_role" {
   name = "codedeploy-role"
@@ -192,22 +222,39 @@ resource "aws_iam_role_policy" "codepipeline_codedeploy_policy" {
 }
 
 # IAM Policy to allow CodeDeploy to access S3 pipeline artifacts
-resource "aws_iam_role_policy" "codedeploy_s3_policy" {
-  name = "codedeploy-s3-access-policy"
-  role = "codedeploy-role"  
+resource "aws_iam_role_policy" "codedeploy_s3_lambda_policy" {
+  name = "codedeploy-s3-lambda-access-policy"
+  role = aws_iam_role.codedeploy_role.name 
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow"
+        Effect = "Allow",
         Action = [
           "s3:*"
         ],
         Resource = [
           "arn:aws:s3:::codepipeline-artifacts-talha",          
-          "arn:aws:s3:::codepipeline-artifacts-talha/*"  
+          "arn:aws:s3:::codepipeline-artifacts-talha/*"
         ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "lambda:UpdateFunctionCode",
+          "lambda:UpdateAlias",
+          "lambda:CreateAlias",
+          "lambda:UpdateFunctionConfiguration",
+          "lambda:GetAlias",
+          "lambda:ListAliases",
+          "lambda:PublishVersion",
+          "lambda:ListVersionsByFunction",
+          "lambda:GetFunction",
+          "lambda:InvokeFunction",
+          "lambda:GetFunctionConfiguration"
+        ],
+        Resource = "arn:aws:lambda:eu-west-2:463470963000:function:*"
       }
     ]
   })
@@ -222,7 +269,7 @@ resource "aws_codebuild_project" "lambda_edge_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "buildspec.yml"
+        buildspec = "LambdaEdge/buildspec.yml"
     }
 
     artifacts {
@@ -246,7 +293,7 @@ resource "aws_codebuild_project" "lambda_cloud_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "buildspec.yml"
+        buildspec = "LambdaCloud/buildspec.yml"
     }
 
     artifacts {
@@ -270,7 +317,7 @@ resource "aws_codebuild_project" "lambda_sagemaker_training_job_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "buildspec.yml"
+        buildspec = "LambdaSageMaker/buildspec.yml"
     }
 
     artifacts {
@@ -294,7 +341,7 @@ resource "aws_codebuild_project" "lambda_neo_compilation_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "buildspec.yml"
+        buildspec = "LambdaNeo/buildspec.yml"
     }
 
     artifacts {
@@ -318,7 +365,7 @@ resource "aws_codebuild_project" "lambda_greengrass_creation_build" {
     source {
         type = "GITHUB"
         location = "https://github.com/talhazaman2001/edge-healthcare-project.git"
-        buildspec = "buildspec.yml"
+        buildspec = "LambdaGreengrass/buildspec.yml"
     }
 
     artifacts {
