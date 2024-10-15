@@ -9,6 +9,10 @@ phases:
       - echo "Zipping Lambda Edge function"
       - zip -r Lambda-Greengrass-LSTM/greengrass_lstm.zip Lambda-Greengrass-LSTM/* -x Lambda-Greengrass-LSTM/appspec.yml
       - mv Lambda-Greengrass-LSTM/appspec.yml .
+      - echo "Publishing new Lambda version"
+      - NEW_VERSION=$(aws lambda publish-version --function-name GreenGrassLSTMFunction --query 'Version' --output text)
+      - echo "Updating alias to point to new version"
+      - aws lambda update-alias --function-name GreenGrassLSTMFunction --name live --function-version $NEW_VERSION
 
 artifacts:
   files:
