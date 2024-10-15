@@ -1,6 +1,6 @@
 version: 0.0
 Resources:
-  - lambda-greengrass-creation:
+  - LambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         Name: "lambda-greengrass-creation"
