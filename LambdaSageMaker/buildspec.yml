@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "No dependencies to install for Lambda SageMakwe"
+  build:
+    commands:
+      - echo "Zipping Lambda SageMaker function"
+      - zip -r Lambda-SageMaker-Training-Job/lambda_sagemaker.zip Lambda-SageMaker-Training-Job/* -x Lambda-SageMaker-Training-Job/appspec.yml
+      - mv Lambda-SageMaker-Training-job/appspec.yml .
+
+artifacts:
+  files:
+    - Lambda-SageMaker-Training-Job/lambda_sagemaker.zip
+    - appspec.yml  
