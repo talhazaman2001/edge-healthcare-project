@@ -13,6 +13,12 @@ phases:
       - zip -r Lambda-Neo-Compilation/lambda_sagemaker_neo.zip Lambda-Neo-Compilation/* -x Lambda-Neo-Compilation/appspec.yml
       - zip -r Lambda-SageMaker-Training-Job/lambda_sagemaker.zip Lambda-SageMaker-Training-Job/* -x Lambda-SageMaker-Training-Job/appspec.yml
       - zip -r Lambda-WebSocket/lambda_websocket.zip Lambda-WebSocket/* -x Lambda-WebSocket/appspec.yml
+     # Move the AppSpec files to the root directory
+      - mv Lambda-Greengrass-Creation/appspec.yml .
+      - mv Lambda-Greengrass-LSTM/appspec.yml .
+      - mv Lambda-Neo-Compilation/appspec.yml .
+      - mv Lambda-SageMaker-Training-Job/appspec.yml .
+      - mv Lambda-WebSocket/appspec.yml .
 
 artifacts:
   files:
@@ -21,8 +27,8 @@ artifacts:
     - Lambda-Neo-Compilation/lambda_sagemaker_neo.zip
     - Lambda-SageMaker-Training-Job/lambda_sagemaker.zip
     - Lambda-WebSocket/lambda_websocket.zip
-    - Lambda-Greengrass-Creation/appspec.yml 
-    - Lambda-Greengrass-LSTM/appspec.yml
-    - Lambda-Neo-Compilation/appspec.yml
-    - Lambda-SageMaker-Training-Job/appspec.yml
-    - Lambda-WebSocket/appspec.yml
+    - appspec-greengrass-creation.yml 
+    - appspec-greengrass-lstm.yml
+    - appspec-neo.yml
+    - appspec-sagemaker.yml
+    - appspec-websocket.yml
