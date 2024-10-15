@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "No dependencies to install for Lambda Edge"
+  build:
+    commands:
+      - echo "Zipping Lambda Edge function"
+      - zip -r Lambda-Greengrass-LSTM/greengrass_lstm.zip Lambda-Greengrass-LSTM/* -x Lambda-Greengrass-LSTM/appspec.yml
+      - mv Lambda-Greengrass-LSTM/appspec.yml .
+
+artifacts:
+  files:
+    - Lambda-Greengrass-LSTM/greengrass_lstm.zip
+    - appspec.yml  
