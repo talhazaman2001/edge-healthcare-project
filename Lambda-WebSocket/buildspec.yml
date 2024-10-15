@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "No dependencies to install for Lambda Cloud"
+      - echo "Installing/updating AWS CLI"
+      - pip install awscli --upgrade
+      - export AWS_DEFAULT_REGION=eu-west-2
+
+  build:
+    commands:
+      - echo "Zipping Lambda Cloud function"
+      - zip -r Lambda-WebSocket/lambda_websocket.zip Lambda-WebSocket/* -x Lambda-WebSocket/appspec.yml
+      - mv Lambda-WebSocket/appspec.yml .
+      
+      - echo "Publishing new Lambda version..."
+      - NEW_VERSION=$(aws lambda publish-version --function-name edge-healthcare-lambda --query 'Version' --output text) || { echo "Lambda version publish failed"; exit 1; }
+      
+      - echo "Fetching current alias version..."
+      - CURRENT_VERSION=$(aws lambda get-alias --function-name edge-healthcare-lambda --name live --query 'FunctionVersion' --output text)
+      - echo "Updating appspec.yml with current and target versions..."
+      - sed -i "s/CURRENT_VERSION_PLACEHOLDER/$CURRENT_VERSION/" appspec.yml
+      - sed -i "s/TARGET_VERSION_PLACEHOLDER/$NEW_VERSION/" appspec.yml
+      
+artifacts:
+  files:
+    - Lambda-WebSocket/lambda_websocket.zip
+    - appspec.yml  
