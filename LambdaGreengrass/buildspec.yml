@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "No dependencies to install for Lambda Greengrass"
+  build:
+    commands:
+      - echo "Zipping Lambda Greengrass function"
+      - zip -r Lambda-Greengrass-Creation/greengrass_creation.zip Lambda-Greengrass-Creation/* -x Lambda-Greengrass-Creation/appspec.yml
+      - mv Lambda-Greengrass-Creation/appspec.yml .
+
+artifacts:
+  files:
+    - Lambda-Greengrass-Creation/greengrass_creation.zip
+    - appspec.yml  
