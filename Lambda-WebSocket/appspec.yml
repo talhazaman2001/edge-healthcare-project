@@ -5,6 +5,6 @@ Resources:
       Properties:
         Name: "edge-healthcare-lambda"
         Alias: "live"
-        CurrentVersion: "2"
-        TargetVersion: "3"
+        CurrentVersion: "CURRENT_VERSION_PLACEHOLDER"
+        TargetVersion: "TARGET_VERSION_PLACEHOLDER"
     
