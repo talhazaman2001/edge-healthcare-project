@@ -9,6 +9,10 @@ phases:
       - echo "Zipping Lambda Neo function"
       - zip -r Lambda-Neo-Compilation/lambda_sagemaker_neo.zip Lambda-Neo-Compilation/* -x Lambda-Neo-Compilation/appspec.yml
       - mv Lambda-Neo-Compilation/appspec.yml .
+      - echo "Publishing new Lambda version"
+      - NEW_VERSION=$(aws lambda publish-version --function-name sagemaker-neo-compilation-job --query 'Version' --output text)
+      - echo "Updating alias to point to new version"
+      - aws lambda update-alias --function-name sagemaker-neo-compilation-job --name live --function-version $NEW_VERSION
 
 artifacts:
   files:
