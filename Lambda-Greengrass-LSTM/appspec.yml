@@ -1,9 +1,9 @@
 version: 0.0
 Resources:
-  - greengrassLSTMFunction:
+  - GreenGrassLSTMFunction:
       Type: AWS::Lambda::Function
       Properties:
-        Name: "greengrassLSTMFunction"
+        Name: "GreenGrassLSTMFunction"
         Alias: "live"
         CurrentVersion: "3"
         TargetVersion: "4"
