@@ -10,9 +10,9 @@ phases:
       - zip -r Lambda-Greengrass-LSTM/greengrass_lstm.zip Lambda-Greengrass-LSTM/* -x Lambda-Greengrass-LSTM/appspec.yml
       - mv Lambda-Greengrass-LSTM/appspec.yml .
       - echo "Publishing new Lambda version"
-      - NEW_VERSION=$(aws lambda publish-version --function-name GreenGrassLSTMFunction --query 'Version' --output text)
+      - NEW_VERSION=$(aws lambda publish-version --function-name GreenGrassLSTMFunction --query 'Version' --output text) || { echo "Lambda version publish failed"; exit 1; }
       - echo "Updating alias to point to new version"
-      - aws lambda update-alias --function-name GreenGrassLSTMFunction --name live --function-version $NEW_VERSION
+      - aws lambda update-alias --function-name GreenGrassLSTMFunction --name live --function-version $NEW_VERSION || { echo "Alias update failed"; exit 1; }
 
 artifacts:
   files:
