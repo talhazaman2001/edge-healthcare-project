@@ -8,11 +8,11 @@ phases:
   build:
     commands:
       - echo "Zipping Lambda functions without adding appspec.yml"
-      - zip -r Lambda-Greengrass-Creation/greengrass_creation.zip Lambda-Greengrass-Creation/*
-      - zip -r Lambda-Greengrass-LSTM/greengrass_LSTM.zip Lambda-Greengrass-LSTM/*
-      - zip -r Lambda-Neo-Compilation/lambda_sagemaker_neo.zip Lambda-Neo-Compilation/*
-      - zip -r Lambda-SageMaker-Training-Job/lambda_sagemaker.zip Lambda-SageMaker-Training-Job/*
-      - zip -r Lambda-WebSocket/lambda_websocket.zip Lambda-WebSocket/*
+      - zip -r Lambda-Greengrass-Creation/greengrass_creation.zip Lambda-Greengrass-Creation/* -x Lambda-Greengrass-Creation/appspec.yml
+      - zip -r Lambda-Greengrass-LSTM/greengrass_LSTM.zip Lambda-Greengrass-LSTM/* -x Lambda-Greengrass-LSTM/appspec.yml
+      - zip -r Lambda-Neo-Compilation/lambda_sagemaker_neo.zip Lambda-Neo-Compilation/* -x Lambda-Neo-Compilation/appspec.yml
+      - zip -r Lambda-SageMaker-Training-Job/lambda_sagemaker.zip Lambda-SageMaker-Training-Job/* -x Lambda-SageMaker-Training-Job/appspec.yml
+      - zip -r Lambda-WebSocket/lambda_websocket.zip Lambda-WebSocket/* -x Lambda-WebSocket/appspec.yml
 
 artifacts:
   files:
@@ -21,4 +21,8 @@ artifacts:
     - Lambda-Neo-Compilation/lambda_sagemaker_neo.zip
     - Lambda-SageMaker-Training-Job/lambda_sagemaker.zip
     - Lambda-WebSocket/lambda_websocket.zip
-    - appspec.yml 
+    - Lambda-Greengrass-Creation/appspec.yml 
+    - Lambda-Greengrass-LSTM/appspec.yml
+    - Lambda-Neo-Compilation/appspec.yml
+    - Lambda-SageMaker-Training-Job/appspec.yml
+    - Lambda-WebSocket/appspec.yml
