@@ -9,6 +9,10 @@ phases:
       - echo "Zipping Lambda Greengrass function"
       - zip -r Lambda-Greengrass-Creation/greengrass_creation.zip Lambda-Greengrass-Creation/* -x Lambda-Greengrass-Creation/appspec.yml
       - mv Lambda-Greengrass-Creation/appspec.yml .
+      - echo "Publishing new Lambda version"
+      - NEW_VERSION=$(aws lambda publish-version --function-name lambda-greengrass-creation --query 'Version' --output text)
+      - echo "Updating alias to point to new version"
+      - aws lambda update-alias --function-name lambda-greengrass-creation --name live --function-version $NEW_VERSION
 
 artifacts:
   files:
