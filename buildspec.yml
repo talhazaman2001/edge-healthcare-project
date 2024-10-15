@@ -3,29 +3,18 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "No dependencies to install"
-
+      - echo "No dependencies to install for Lambda Greengrass"
   build:
     commands:
-      - echo "Zipping Lambda functions without adding appspec.yml"
+      - echo "Zipping Lambda Greengrass function"
       - zip -r Lambda-Greengrass-Creation/greengrass_creation.zip Lambda-Greengrass-Creation/* -x Lambda-Greengrass-Creation/appspec.yml
-      - zip -r Lambda-Greengrass-LSTM/greengrass_LSTM.zip Lambda-Greengrass-LSTM/* -x Lambda-Greengrass-LSTM/appspec.yml
-      - zip -r Lambda-Neo-Compilation/lambda_sagemaker_neo.zip Lambda-Neo-Compilation/* -x Lambda-Neo-Compilation/appspec.yml
-      - zip -r Lambda-SageMaker-Training-Job/lambda_sagemaker.zip Lambda-SageMaker-Training-Job/* -x Lambda-SageMaker-Training-Job/appspec.yml
-      - zip -r Lambda-WebSocket/lambda_websocket.zip Lambda-WebSocket/* -x Lambda-WebSocket/appspec.yml
-     # Move the AppSpec files to the root directory
       - mv Lambda-Greengrass-Creation/appspec.yml .
-      - mv Lambda-Greengrass-LSTM/appspec.yml .
-      - mv Lambda-Neo-Compilation/appspec.yml .
-      - mv Lambda-SageMaker-Training-Job/appspec.yml .
-      - mv Lambda-WebSocket/appspec.yml .
+      - echo "Publishing new Lambda version"
+      - NEW_VERSION=$(aws lambda publish-version --function-name lambda-greengrass-creation --query 'Version' --output text) || { echo "Lambda version publish failed"; exit 1; }
+      - echo "Updating alias to point to new version"
+      - aws lambda update-alias --function-name lambda-greengrass-creation --name live --function-version $NEW_VERSION || { echo "Alias update failed"; exit 1; }
 
 artifacts:
   files:
     - Lambda-Greengrass-Creation/greengrass_creation.zip
-    - Lambda-Greengrass-LSTM/greengrass_LSTM.zip
-    - Lambda-Neo-Compilation/lambda_sagemaker_neo.zip
-    - Lambda-SageMaker-Training-Job/lambda_sagemaker.zip
-    - Lambda-WebSocket/lambda_websocket.zip
-    - appspec.yml 
-    
+    - appspec.yml  
