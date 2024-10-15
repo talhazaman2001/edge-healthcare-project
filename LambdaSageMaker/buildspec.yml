@@ -9,10 +9,17 @@ phases:
       - echo "Zipping Lambda SageMaker function"
       - zip -r Lambda-SageMaker-Training-Job/lambda_sagemaker.zip Lambda-SageMaker-Training-Job/* -x Lambda-SageMaker-Training-Job/appspec.yml
       - mv Lambda-SageMaker-Training-Job/appspec.yml .
-      - echo "Publishing new Lambda version"
+      
+      - echo "Publishing new Lambda version..."
       - NEW_VERSION=$(aws lambda publish-version --function-name sagemaker-training-job --query 'Version' --output text) || { echo "Lambda version publish failed"; exit 1; }
-      - echo "Updating alias to point to new version"
-      - aws lambda update-alias --function-name sagemaker-training-job --name live --function-version $NEW_VERSION || { echo "Alias update failed"; exit 1; }
+      - echo "Published new version: $NEW_VERSION"
+      
+      - echo "Fetching current alias version..."
+      - CURRENT_VERSION=$(aws lambda get-alias --function-name sagemaker-training-job --name live --query 'FunctionVersion' --output text)
+      - echo "Updating appspec.yml with current and target versions..."
+      - sed -i "s/CURRENT_VERSION_PLACEHOLDER/$CURRENT_VERSION/" Lambda-SageMaker-Training-Job/appspec.yml
+      - sed -i "s/TARGET_VERSION_PLACEHOLDER/$NEW_VERSION/" Lambda-SageMaker-Training-Job/appspec.yml
+
 
 artifacts:
   files:
