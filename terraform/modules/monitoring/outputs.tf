@@ -42,3 +42,8 @@ output "sns_endpoint_dns" {
     description = "DNS entries for the SNS VPC endpoint"
     value = aws_vpc_endpoint.sns_endpoint.dns_entry
 }
+
+output "model_alarm_rule_arn" {
+    description = "Cloudwatch Alarm Rule for Model response"
+    value = aws_cloudwatch_event_rule.model_alarm_rule.arn
+}

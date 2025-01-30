@@ -39,6 +39,14 @@ locals {
             memory_size = 256
             timeout     = 300
             filename    = "${path.root}/../lambda/Lambda-Greengrass-Creation/greengrass_creation.zip"
+        },
+        model_alarm_response = {
+            name        = "${var.environment}-model-alarm-response"
+            handler     = "app.handler"
+            runtime     = "python3.12"
+            memory_size = 256
+            timeout     = 300
+            filename    = "${path.root}/../lambda/Lambda-Alarm-Response/alarm_response.zip"
         }
     }
 }
@@ -94,6 +102,15 @@ resource "aws_lambda_permission" "neo_invoke" {
     function_name = aws_lambda_function.functions["sagemaker_neo"].function_name
     principal = "sagemaker.amazonaws.com"
 }
+
+resource "aws_lambda_permission" "cloudwatch_invoke" {
+    statement_id  = "AllowCloudWatchInvocation"
+    action = "lambda:InvokeFunction"
+    function_name = aws_lambda_function.functions["model_alarm_response"].function_name
+    principal = "events.amazonaws.com"
+    source_arn = var.model_alarm_rule_arn
+}
+
 
 # VPC Endpoint
 resource "aws_vpc_endpoint" "lambda_endpoint" {

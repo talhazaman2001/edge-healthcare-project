@@ -114,6 +114,11 @@ resource "aws_iam_role_policy_attachment" "lambda_sagemaker_policy" {
     policy_arn = "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "secrets_access" {
+    role       = aws_iam_role.lambda_execution_role
+    policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+}
+
 
 # SageMaker Training Job Role
 resource "aws_iam_role" "lambda_sagemaker_training_job_role" {

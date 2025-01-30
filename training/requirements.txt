@@ -1,0 +1,7 @@
+boto3==1.28.0
+sagemaker==2.190.0
+numpy==1.24.3
+pandas==2.0.3
+requests==2.31.0
+cloudwatch-metrics==0.4.0
+python-dateutil==2.8.2

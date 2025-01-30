@@ -33,3 +33,14 @@ variable "alert_email" {
     description = "Email address for alert notifications"
     type = string
 }
+
+variable "accuracy_threshold" {
+    description = "Threshold for model accuracy alerts"
+    type        = number
+    default     = 0.95
+}
+
+variable "model_alarm_response_lambda_arn" {
+    description = "ARN of the model alarm response Lambda function"
+    type = string
+}

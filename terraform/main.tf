@@ -63,6 +63,7 @@ module "lambda" {
         sagemaker_neo = module.iam.lambda_sagemaker_neo_role_arn
         greengrass_creation = module.iam.lambda_greengrass_role_arn
     }
+    model_alarm_rule_arn = module.monitoring.model_alarm_rule_arn
 
     lambda_source_dir = "${path.root}/lambda"
 }
@@ -78,6 +79,7 @@ module "monitoring" {
     lambda_function_name = module.lambda.function_names["edge_healthcare"]
     alert_email = var.alert_email 
     log_retention_days = 30
+    model_alarm_response_lambda_arn = module.lambda.function_arns["model_alarm_response"]
 }
 
 # SageMaker IAM Module

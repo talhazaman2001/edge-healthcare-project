@@ -32,3 +32,8 @@ variable "lambda_source_dir" {
     description = "Directory containing Lambda function source code"
     type = string
 }
+
+variable "model_alarm_rule_arn" {
+    description = "ARN of the EventBridge Rule that triggers the alarm response"
+    type = string
+}
