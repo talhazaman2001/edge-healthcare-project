@@ -13,7 +13,7 @@ def trigger_training_job():
         training_params = {
             "TrainingJobName": job_name,
             "AlgorithmSpecification": {
-                "TrainingImage": "763104351884.dkr.ecr.eu-west-2.amazonaws.com/tensorflow-training:2.11.0-gpu-py39",
+                "TrainingImage": "764974769150.dkr.ecr.eu-west-2.amazonaws.com/sagemaker-xgboost:1.7-1",
                 "TrainingInputMode": "File"
             },
             "RoleArn": os.environ['SAGEMAKER_ROLE_ARN'],
@@ -31,7 +31,7 @@ def trigger_training_job():
                 "S3OutputPath": f"s3://{os.environ['MODEL_BUCKET']}/trained-models/"
             },
             "ResourceConfig": {
-                "InstanceType": "ml.p2.xlarge",
+                "InstanceType": "ml.m5.large",
                 "InstanceCount": 1,
                 "VolumeSizeInGB": 50
             },

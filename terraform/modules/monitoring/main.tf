@@ -121,6 +121,17 @@ resource "aws_cloudwatch_log_group" "ml_monitoring" {
     }
 }
 
+# Lambda Model Alarm Response Log Group
+resource "aws_cloudwatch_log_group" "lambda_model_logs" {
+    name = "/aws/lambda/${var.environment}-model-alarm-response"
+    retention_in_days = 30
+
+    tags = {
+        Environment = var.environment
+        Component = "MLOps"
+    }
+}
+
 # Model Performance Log Group
 resource "aws_cloudwatch_log_group" "model_performance" {
     name = "/aws/healthcare/${var.environment}/model-performance"
@@ -135,6 +146,17 @@ resource "aws_cloudwatch_log_group" "model_performance" {
 # Data Drift Log Group
 resource "aws_cloudwatch_log_group" "data_drift" {
     name = "/aws/healthcare/${var.environment}/data-drift"
+    retention_in_days = 30
+
+    tags = {
+        Environment = var.environment
+        Component = "MLOps"
+    }
+}
+
+# Performance Latency Log Group
+resource "aws_cloudwatch_log_group" "performance_latency" {
+    name = "/aws/healthcare/${var.environment}/performance-latency"
     retention_in_days = 30
 
     tags = {
@@ -194,6 +216,29 @@ resource "aws_cloudwatch_metric_alarm" "model_accuracy" {
     }
 }
 
+# Prediction Latency Alarm
+resource "aws_cloudwatch_metric_alarm" "prediction_latency" {
+    alarm_name = "${var.environment}-prediction-latency"
+    comparison_operator = "GreaterThanThreshold"
+    evaluation_periods  = "2"
+    metric_name = "PredictionLatency"
+    namespace = "Healthcare/ML"
+    period  = "300"
+    statistic = "Average"
+    threshold = var.latency_threshold
+    alarm_description = "Prediction latency above threshold"
+    alarm_actions = [aws_sns_topic.model_alerts.arn]
+
+    tags = {
+        Environment = var.environment
+        Component = "MLOps"
+    }
+
+    dimensions = {
+        LogGroupName = aws_cloudwatch_log_group.performance_latency.name
+    }
+}
+
 # EventBridge Rule to capture CloudWatch Alarm state changes
 resource "aws_cloudwatch_event_rule" "model_alarm_rule" {
     name = "${var.environment}-model-alarm-rule"
@@ -201,12 +246,10 @@ resource "aws_cloudwatch_event_rule" "model_alarm_rule" {
 
     event_pattern = jsonencode({
         source = ["aws.cloudwatch"]
-        detail-type = ["CloudWatch Alarm State Change"]
+        detail_type = ["CloudWatch Alarm State Change"]
         detail = {
             alarmName = [
                 aws_cloudwatch_metric_alarm.model_accuracy.alarm_name,
-                aws_cloudwatch_metric_alarm.prediction_latency.alarm_name,
-                aws_cloudwatch_metric_alarm.data_drift.alarm_name
             ]
         }
     })
@@ -280,7 +323,7 @@ resource "aws_cloudwatch_dashboard" "model_monitoring" {
 
 # SNS Topic for Model Alerts
 resource "aws_sns_topic" "model_alerts" {
-    name = "${var.environment}-iot-core-error-alerts"
+    name = "${var.environment}-model-error-alerts"
 
     tags = {
         Environment = var.environment

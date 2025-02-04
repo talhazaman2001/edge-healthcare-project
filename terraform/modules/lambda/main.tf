@@ -46,7 +46,7 @@ locals {
             runtime     = "python3.12"
             memory_size = 256
             timeout     = 300
-            filename    = "${path.root}/../lambda/Lambda-Alarm-Response/alarm_response.zip"
+            filename    = "${path.root}/../lambda/model_alarm_response/model_alarm_response.zip"
         }
     }
 }

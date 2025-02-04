@@ -115,7 +115,7 @@ resource "aws_iam_role_policy_attachment" "lambda_sagemaker_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "secrets_access" {
-    role       = aws_iam_role.lambda_execution_role
+    role       = aws_iam_role.lambda_execution_role.name
     policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 }
 

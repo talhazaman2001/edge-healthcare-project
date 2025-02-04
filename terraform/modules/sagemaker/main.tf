@@ -4,8 +4,18 @@ resource "aws_sagemaker_model" "sagemaker_cloud_model" {
     execution_role_arn = var.sagemaker_execution_role_arn
 
     primary_container {
-      image = "763104351884.dkr.ecr.eu-west-2.amazonaws.com/tensorflow-training:2.11.0-gpu-py39"
+      image = "764974769150.dkr.ecr.eu-west-2.amazonaws.com/sagemaker-xgboost:1.7-1"
+      model_data_url = "s3://${var.model_bucket_name}/trained-models/model.tar.gz"
     }
+
+    depends_on = [ aws_s3_object.initial_model ]
+}
+
+# Create dummy model content
+resource "aws_s3_object" "initial_model" {
+    bucket = var.model_bucket_name
+    key = "trained-models/model.tar.gz"
+    source = "${path.module}/models/model.tar.gz"
 }
 
 resource "aws_sagemaker_endpoint_configuration" "lstm_endpoint_config" {

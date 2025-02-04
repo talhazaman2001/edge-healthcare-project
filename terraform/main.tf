@@ -62,6 +62,7 @@ module "lambda" {
         sagemaker_training = module.iam.lambda_sagemaker_training_role_arn
         sagemaker_neo = module.iam.lambda_sagemaker_neo_role_arn
         greengrass_creation = module.iam.lambda_greengrass_role_arn
+        model_alarm_response = module.iam.lambda_execution_role_arn
     }
     model_alarm_rule_arn = module.monitoring.model_alarm_rule_arn
 

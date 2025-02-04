@@ -59,3 +59,8 @@ variable "alert_email" {
     description = "Email address for monitoring alerts"
     type = string
 }
+
+variable "sagemaker_role_arn" {
+    type = string
+    description = "ARN of SageMaker Execution Role"
+}   

@@ -44,3 +44,8 @@ variable "model_alarm_response_lambda_arn" {
     description = "ARN of the model alarm response Lambda function"
     type = string
 }
+
+variable "latency_threshold" {
+    type = string
+    default = "0.5"
+}

@@ -26,13 +26,13 @@ variable "model_bucket_name" {
 variable "model_image_uri" {
     description = "URI of the model image in ECR"
     type = string
-    default = "763104351884.dkr.ecr.eu-west-2.amazonaws.com/tensorflow-training:2.11.0-gpu-py39"
+    default = "764974769150.dkr.ecr.eu-west-2.amazonaws.com/sagemaker-xgboost:1.7-1"
 }
 
 variable "instance_type" {
     description = "SageMaker instance type for endpoint"
     type = string
-    default = "ml.p2.xlarge"
+    default = "ml.m5.large"
 }
 
 variable "instance_count" {

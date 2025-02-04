@@ -97,25 +97,6 @@ resource "aws_s3_bucket_versioning" "historical_sagemaker_versioning" {
     }
 }
 
-resource "aws_s3_object" "training_data" {
-    bucket = aws_s3_bucket.historical_sagemaker_bucket.bucket
-    key = "historical-training-data/mock_health_metrics.csv"
-    source = "${var.data_files_path}/mock_health_metrics.csv"
-    acl = "private"
-}
-
-resource "aws_s3_object" "trained_model_output" {
-    bucket = aws_s3_bucket.historical_sagemaker_bucket.bucket
-    key = "trained-models/"
-    acl = "private"
-}
-
-resource "aws_s3_object" "neo_compilation_output" {
-    bucket = aws_s3_bucket.historical_sagemaker_bucket.bucket
-    key = "neo-compilation-output/"
-    acl = "private"
-}
-
 resource "aws_s3_bucket_lifecycle_configuration" "sagemaker_config" {
     bucket = aws_s3_bucket.historical_sagemaker_bucket.id
 

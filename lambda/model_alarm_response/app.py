@@ -99,7 +99,7 @@ class ModelMonitoringResponse:
                 message=f"Error: {str(e)}"
             )
 
-    def _switch_to_backup_model(self, endpoint_name: str):
+    def switch_to_backup_model(self, endpoint_name: str):
         """Switch endpoint to backup model."""
         try:
             response = sagemaker.update_endpoint(
@@ -111,7 +111,7 @@ class ModelMonitoringResponse:
             logger.error(f"Error switching to backup model: {e}")
             raise
 
-    def _trigger_retraining_pipeline(self):
+    def trigger_retraining_pipeline(self):
         """Trigger model retraining via GitHub Actions."""
         try:
             # Create GitHub client
@@ -123,7 +123,7 @@ class ModelMonitoringResponse:
             )['SecretString']
 
             # Define repository details
-            repo = "edge-healthcare project"
+            repo = "edge-healthcare-project"
             owner = "talhazaman2001"
             
             # Trigger GitHub workflow
@@ -153,7 +153,7 @@ class ModelMonitoringResponse:
             logger.error(f"Error triggering GitHub Actions workflow: {e}")
             raise
 
-    def _send_alert(self, subject: str, message: str):
+    def send_alert(self, subject: str, message: str):
         """Send SNS alert."""
         try:
             sns.publish(
